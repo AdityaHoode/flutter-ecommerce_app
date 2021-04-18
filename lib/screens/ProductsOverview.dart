@@ -1,4 +1,5 @@
-import 'package:ecommerce_app/providers/cart.dart';
+import 'package:ecommerce_app/providers/cartProvider.dart';
+import 'package:ecommerce_app/screens/Cart.dart';
 import 'package:ecommerce_app/widgets/Badge.dart';
 import 'package:provider/provider.dart';
 
@@ -43,14 +44,16 @@ class _ProductsOverviewState extends State<ProductsOverview> {
                 });
               },
             ),
-            Consumer<Cart>(
+            Consumer<CartProvider>(
               builder: (_, cartItems, ch) => Badge(
                 child: ch,
                 value: cartItems.getItemCount.toString(),
               ),
               child: IconButton(
                 icon: Icon(Icons.shopping_cart_outlined),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Cart.routeName);
+                },
               ),
             ),
           ],

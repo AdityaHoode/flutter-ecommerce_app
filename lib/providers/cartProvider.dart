@@ -9,7 +9,7 @@ class CartItem {
   CartItem({this.id, this.title, this.quantity, this.price});
 }
 
-class Cart with ChangeNotifier {
+class CartProvider with ChangeNotifier {
   Map<String, CartItem> _cartItems = {};
 
   Map<String, CartItem> get getCartItem {
@@ -18,6 +18,14 @@ class Cart with ChangeNotifier {
 
   int get getItemCount {
     return _cartItems.length;
+  }
+
+  double get getTotalAmount {
+    var total = 0.0;
+    _cartItems.forEach((key, cartItem) {
+      total += cartItem.price * cartItem.quantity;
+    });
+    return total;
   }
 
   void addItem(String productId, double price, String title) {
@@ -42,6 +50,11 @@ class Cart with ChangeNotifier {
         ),
       );
     }
+    notifyListeners();
+  }
+
+  void removeItem(String id) {
+    _cartItems.remove(id);
     notifyListeners();
   }
 }
