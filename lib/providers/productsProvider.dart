@@ -1,4 +1,4 @@
-import 'package:ecommerce_app/providers/product.dart';
+import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:flutter/foundation.dart';
 
 class Products with ChangeNotifier {

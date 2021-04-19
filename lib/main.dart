@@ -1,8 +1,9 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
+import 'package:ecommerce_app/providers/ordersProvider.dart';
 import 'package:ecommerce_app/screens/ProductsOverview.dart';
 import 'package:provider/provider.dart';
 import './screens/ProductDetail.dart';
-import './providers/products.dart';
+import 'providers/productsProvider.dart';
 import './screens/Cart.dart';
 
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (ctx) => Products()),
         ChangeNotifierProvider(create: (ctx) => CartProvider()),
+        ChangeNotifierProvider(create: (ctx) => Orders()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

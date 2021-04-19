@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 
-class CartItem {
+class CartItemProvider {
   final String id;
   final String title;
   final int quantity;
   final double price;
 
-  CartItem({this.id, this.title, this.quantity, this.price});
+  CartItemProvider({this.id, this.title, this.quantity, this.price});
 }
 
 class CartProvider with ChangeNotifier {
-  Map<String, CartItem> _cartItems = {};
+  Map<String, CartItemProvider> _cartItems = {};
 
-  Map<String, CartItem> get getCartItem {
+  Map<String, CartItemProvider> get getCartItem {
     return {..._cartItems};
   }
 
@@ -22,9 +22,11 @@ class CartProvider with ChangeNotifier {
 
   double get getTotalAmount {
     var total = 0.0;
-    _cartItems.forEach((key, cartItem) {
-      total += cartItem.price * cartItem.quantity;
-    });
+    _cartItems.forEach(
+      (key, cartItem) {
+        total += cartItem.price * cartItem.quantity;
+      },
+    );
     return total;
   }
 
@@ -32,7 +34,7 @@ class CartProvider with ChangeNotifier {
     if (_cartItems.containsKey(productId)) {
       _cartItems.update(
         productId,
-        (existingCartItem) => CartItem(
+        (existingCartItem) => CartItemProvider(
           id: existingCartItem.id,
           title: existingCartItem.title,
           price: existingCartItem.price,
@@ -42,7 +44,7 @@ class CartProvider with ChangeNotifier {
     } else {
       _cartItems.putIfAbsent(
         productId,
-        () => CartItem(
+        () => CartItemProvider(
           id: DateTime.now().toString(),
           title: title,
           price: price,
@@ -55,6 +57,11 @@ class CartProvider with ChangeNotifier {
 
   void removeItem(String id) {
     _cartItems.remove(id);
+    notifyListeners();
+  }
+
+  void clear() {
+    _cartItems = {};
     notifyListeners();
   }
 }
