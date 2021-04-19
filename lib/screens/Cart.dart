@@ -38,7 +38,7 @@ class Cart extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      Provider.of<Orders>(context, listen: false).addOrder(
+                      Provider.of<OrdersProvider>(context, listen: false).addOrder(
                         cart.getCartItem.values.toList(),
                         cart.getTotalAmount,
                       );
