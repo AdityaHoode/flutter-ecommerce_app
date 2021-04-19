@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/screens/Cart.dart';
+import 'package:ecommerce_app/widgets/AppDrawer.dart';
 import 'package:ecommerce_app/widgets/Badge.dart';
 import 'package:provider/provider.dart';
 
@@ -58,6 +59,7 @@ class _ProductsOverviewState extends State<ProductsOverview> {
             ),
           ],
         ),
+        drawer: AppDrawer(),
         body: ProductsGrid(_showFavorites),
       ),
     );

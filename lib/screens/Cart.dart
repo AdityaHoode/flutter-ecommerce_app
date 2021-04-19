@@ -31,14 +31,15 @@ class Cart extends StatelessWidget {
                   Spacer(),
                   Chip(
                     label: Text(
-                      "₹ ${cart.getTotalAmount}",
+                      "₹ ${cart.getTotalAmount.toStringAsFixed(2)}",
                       style: TextStyle(color: Colors.white),
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
                   TextButton(
                     onPressed: () {
-                      Provider.of<OrdersProvider>(context, listen: false).addOrder(
+                      Provider.of<OrdersProvider>(context, listen: false)
+                          .addOrder(
                         cart.getCartItem.values.toList(),
                         cart.getTotalAmount,
                       );
