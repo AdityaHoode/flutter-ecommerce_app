@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/widgets/CartItem.dart';
 import 'package:flutter/cupertino.dart';
 
 class CartItemProvider {
@@ -62,6 +63,26 @@ class CartProvider with ChangeNotifier {
 
   void clear() {
     _cartItems = {};
+    notifyListeners();
+  }
+
+  void removeSingleItem(String productId) {
+    if (!_cartItems.containsKey(productId)) {
+      return;
+    }
+    if (_cartItems[productId].quantity > 1) {
+      _cartItems.update(
+        productId,
+        (existingItem) => CartItemProvider(
+          id: existingItem.id,
+          title: existingItem.title,
+          price: existingItem.price,
+          quantity: existingItem.quantity - 1,
+        ),
+      );
+    } else {
+      _cartItems.remove(productId);
+    }
     notifyListeners();
   }
 }
