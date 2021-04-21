@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/screens/Orders.dart';
+import 'package:ecommerce_app/screens/UserProducts.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -7,6 +8,10 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
+          DrawerHeader(
+            child: Text('Hello'),
+            curve: Curves.fastOutSlowIn,
+          ),
           AppBar(
             title: Text('Hello'),
             automaticallyImplyLeading: false,
@@ -25,6 +30,15 @@ class AppDrawer extends StatelessWidget {
             title: Text('Orders'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(Orders.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.edit),
+            title: Text('Manage Products'),
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(UserProducts.routeName);
             },
           ),
         ],
