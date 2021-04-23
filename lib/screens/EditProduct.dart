@@ -97,6 +97,14 @@ class _EditProductState extends State<EditProduct> {
                 onFieldSubmitted: (value) {
                   FocusScope.of(context).requestFocus(_descriptionFocusNode);
                 },
+                validator: (value) {
+                  if (value.isEmpty) return 'Please provide a price';
+                  if (double.tryParse(value) == null)
+                    return 'Please provide a valid number';
+                  if (double.parse(value) <= 0)
+                    return 'Please provide a valid price';
+                  return null;
+                },
                 onSaved: (value) {
                   _editedProduct = Product(
                     title: _editedProduct.title,
@@ -112,6 +120,11 @@ class _EditProductState extends State<EditProduct> {
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descriptionFocusNode,
+                validator: (value) {
+                  if (value.isEmpty) return 'Please provide a description';
+                  if (value.length < 10) return 'Describe some more';
+                  return null;
+                },
                 onSaved: (value) {
                   _editedProduct = Product(
                     title: _editedProduct.title,
@@ -153,6 +166,13 @@ class _EditProductState extends State<EditProduct> {
                       focusNode: _imageUrlFocusNode,
                       onFieldSubmitted: (value) {
                         _saveForm();
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) return 'Please provide a URL';
+                        if (!value.startsWith('http') &&
+                            !value.startsWith('https'))
+                          return 'Please provide a valid URL';
+                        return null;
                       },
                       onSaved: (value) {
                         _editedProduct = Product(
