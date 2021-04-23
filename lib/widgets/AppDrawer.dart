@@ -8,10 +8,6 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          DrawerHeader(
-            child: Text('Hello'),
-            curve: Curves.fastOutSlowIn,
-          ),
           AppBar(
             title: Text('Hello'),
             automaticallyImplyLeading: false,
