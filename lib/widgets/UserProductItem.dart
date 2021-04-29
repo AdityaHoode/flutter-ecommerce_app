@@ -32,7 +32,27 @@ class UserProductItem extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
-                Provider.of<Products>(context, listen: false).deleteProduct(id);
+                Provider.of<Products>(context, listen: false)
+                    .deleteProduct(id)
+                    .catchError(
+                  (error) {
+                    return showDialog<Null>(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: Text('Oops!'),
+                        content: Text('Something went wrong'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                            },
+                            child: Text('Okay'),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                );
               },
               color: Theme.of(context).errorColor,
             ),

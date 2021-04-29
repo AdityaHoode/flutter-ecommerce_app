@@ -129,8 +129,17 @@ class Products with ChangeNotifier {
     }
   }
 
-  void deleteProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
-    notifyListeners();
+  Future<void> deleteProduct(String id) {
+    final url = Uri.parse(
+        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/products/$id.json');
+    return http.delete(url).then((res) {
+      if (res.statusCode >= 400) {
+        throw Exception();
+      }
+      _items.removeWhere((prod) => prod.id == id);
+      notifyListeners();
+    }).catchError((error) {
+      throw error;
+    });
   }
 }
