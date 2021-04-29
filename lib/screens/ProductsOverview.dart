@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
+import 'package:ecommerce_app/providers/productsProvider.dart';
 import 'package:ecommerce_app/screens/Cart.dart';
 import 'package:ecommerce_app/widgets/AppDrawer.dart';
 import 'package:ecommerce_app/widgets/Badge.dart';
@@ -16,6 +17,17 @@ class ProductsOverview extends StatefulWidget {
 
 class _ProductsOverviewState extends State<ProductsOverview> {
   var _showFavorites = false;
+  var _isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      Provider.of<Products>(context).getProducts();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
