@@ -36,20 +36,7 @@ class Cart extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Provider.of<OrdersProvider>(context, listen: false)
-                          .addOrder(
-                        cart.getCartItem.values.toList(),
-                        cart.getTotalAmount,
-                      );
-                      cart.clear();
-                    },
-                    child: Text(
-                      "ORDER NOW",
-                      style: TextStyle(color: Theme.of(context).primaryColor),
-                    ),
-                  )
+                  OrderButton(cart: cart)
                 ],
               ),
             ),
@@ -71,6 +58,50 @@ class Cart extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key key,
+    @required this.cart,
+  }) : super(key: key);
+
+  final CartProvider cart;
+
+  @override
+  _OrderButtonState createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: (widget.cart.getTotalAmount <= 0 || isLoading)
+          ? null
+          : () async {
+              setState(() {
+                isLoading = true;
+              });
+              await Provider.of<OrdersProvider>(context, listen: false)
+                  .addOrder(
+                widget.cart.getCartItem.values.toList(),
+                widget.cart.getTotalAmount,
+              );
+              setState(() {
+                isLoading = true;
+              });
+              widget.cart.clear();
+            },
+      child: isLoading
+          ? CircularProgressIndicator()
+          : Text(
+              "ORDER NOW",
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
     );
   }
 }
