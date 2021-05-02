@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
+import 'package:ecommerce_app/widgets/CartItem.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -15,8 +16,40 @@ class OrderItemProvider {
 class OrdersProvider with ChangeNotifier {
   List<OrderItemProvider> _orders = [];
 
-  List<OrderItemProvider> get orders {
+  List<OrderItemProvider> get getOrders {
     return [..._orders];
+  }
+
+  Future<void> fetchOrders() async {
+    final url = Uri.parse(
+        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/orders.json');
+    final res = await http.get(url);
+    final fetchedOrders = json.decode(res.body) as Map<String, dynamic>;
+    final List<OrderItemProvider> loadedOrders = [];
+    if (fetchedOrders == null) {
+      return;
+    }
+    fetchedOrders.forEach(
+      (oId, oData) => loadedOrders.add(
+        OrderItemProvider(
+          id: oId,
+          amount: oData['amount'],
+          dateTime: DateTime.parse(oData['dateTime']),
+          products: (oData['products'] as List<dynamic>)
+              .map(
+                (e) => CartItemProvider(
+                  id: e['id'],
+                  title: e['title'],
+                  price: e['price'],
+                  quantity: e['quantity'],
+                ),
+              )
+              .toList(),
+        ),
+      ),
+    );
+    _orders = loadedOrders.reversed.toList();
+    notifyListeners();
   }
 
   Future<void> addOrder(

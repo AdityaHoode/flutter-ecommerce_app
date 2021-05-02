@@ -4,9 +4,35 @@ import 'package:ecommerce_app/widgets/OrderItem.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Orders extends StatelessWidget {
+class Orders extends StatefulWidget {
   static const routeName = '/orders';
-  
+
+  @override
+  _OrdersState createState() => _OrdersState();
+}
+
+class _OrdersState extends State<Orders> {
+  var isLoading = false;
+  var isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    if (isInit) {
+      setState(() {
+        isLoading = true;
+      });
+      Provider.of<OrdersProvider>(context, listen: false)
+          .fetchOrders()
+          .then((_) {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+    isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     final orderData = Provider.of<OrdersProvider>(context);
@@ -15,12 +41,14 @@ class Orders extends StatelessWidget {
         title: Text("Your Orders"),
       ),
       drawer: AppDrawer(),
-      body: ListView.builder(
-        itemCount: orderData.orders.length,
-        itemBuilder: (ctx, index) {
-          return OrderItem(orderData.orders[index]);
-        },
-      ),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: orderData.getOrders.length,
+              itemBuilder: (ctx, index) {
+                return OrderItem(orderData.getOrders[index]);
+              },
+            ),
     );
   }
 }

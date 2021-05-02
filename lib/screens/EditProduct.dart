@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/providers/productsProvider.dart';
