@@ -12,43 +12,47 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> {
-  var isLoading = false;
-  var isInit = true;
+  Future _fetchOrders;
+  Future _callFetchOrders() {
+    return Provider.of<OrdersProvider>(context, listen: false).fetchOrders();
+  }
 
   @override
-  void didChangeDependencies() {
-    if (isInit) {
-      setState(() {
-        isLoading = true;
-      });
-      Provider.of<OrdersProvider>(context, listen: false)
-          .fetchOrders()
-          .then((_) {
-        setState(() {
-          isLoading = false;
-        });
-      });
-    }
-    isInit = false;
-    super.didChangeDependencies();
+  void initState() {
+    _fetchOrders = _callFetchOrders();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final orderData = Provider.of<OrdersProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Your Orders"),
       ),
       drawer: AppDrawer(),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: orderData.getOrders.length,
-              itemBuilder: (ctx, index) {
-                return OrderItem(orderData.getOrders[index]);
-              },
-            ),
+      body: FutureBuilder(
+        future: _fetchOrders,
+        builder: (ctx, dataSnapshot) {
+          if (dataSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            if (dataSnapshot.error == null) {
+              return Consumer<OrdersProvider>(
+                builder: (ctx, orderData, child) {
+                  return ListView.builder(
+                    itemCount: orderData.getOrders.length,
+                    itemBuilder: (ctx, index) {
+                      return OrderItem(orderData.getOrders[index]);
+                    },
+                  );
+                },
+              );
+            } else {
+              return Center(child: Text("Oops! An error occured"));
+            }
+          }
+        },
+      ),
     );
   }
 }
