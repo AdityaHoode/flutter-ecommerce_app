@@ -14,7 +14,7 @@ class Orders extends StatefulWidget {
 class _OrdersState extends State<Orders> {
   Future _fetchOrders;
   Future _callFetchOrders() {
-    return Provider.of<OrdersProvider>(context, listen: false).fetchOrders();
+    return Provider.of<OrdersProvider>(context, listen: false).fetchOrders(); // So that fetchOrders is not called everytime the widget rebuilds 
   }
 
   @override
@@ -52,7 +52,7 @@ class _OrdersState extends State<Orders> {
             }
           }
         },
-      ),
+      ),// This is better than using the isInit & isLoading workaround
     );
   }
 }
