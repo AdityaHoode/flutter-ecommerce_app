@@ -9,9 +9,24 @@ class AuthProvider with ChangeNotifier {
   String _userId;
 
   Future<void> signUp(String email, String password) async {
-    print(env['WEB_API_KEY']);
     final url = Uri.parse(
         "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${env['WEB_API_KEY']}");
+    final res = await http.post(
+      url,
+      body: json.encode(
+        {
+          'email': email,
+          'password': password,
+          'returnSecureToken': true,
+        },
+      ),
+    );
+    print(json.decode(res.body));
+  }
+
+  Future<void> login(String email, String password) async {
+    final url = Uri.parse(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${env['WEB_API_KEY']}");
     final res = await http.post(
       url,
       body: json.encode(
