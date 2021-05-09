@@ -23,28 +23,29 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (ctx) => Products()),
-        ChangeNotifierProvider(create: (ctx) => CartProvider()),
-        ChangeNotifierProvider(create: (ctx) => OrdersProvider()),
-        ChangeNotifierProvider(create: (ctx) => AuthProvider()),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: Colors.purple,
-          accentColor: Colors.deepOrange,
-          fontFamily: 'Lato',
-        ),
-        home: AuthScreen(),
-        routes: {
-          ProductDetail.routeName: (ctx) => ProductDetail(),
-          Cart.routeName: (ctx) => Cart(),
-          Orders.routeName: (ctx) => Orders(),
-          UserProducts.routeName: (ctx) => UserProducts(),
-          EditProduct.routeName: (ctx) => EditProduct(),
-        },
-      ),
-    );
+        providers: [
+          ChangeNotifierProvider(create: (ctx) => Products()),
+          ChangeNotifierProvider(create: (ctx) => CartProvider()),
+          ChangeNotifierProvider(create: (ctx) => OrdersProvider()),
+          ChangeNotifierProvider(create: (ctx) => AuthProvider()),
+        ],
+        child: Consumer<AuthProvider>(
+          builder: (ctx, authData, _) => MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primaryColor: Colors.purple,
+              accentColor: Colors.deepOrange,
+              fontFamily: 'Lato',
+            ),
+            home: authData.getIsAuth ? ProductsOverview() : AuthScreen(),
+            routes: {
+              ProductDetail.routeName: (ctx) => ProductDetail(),
+              Cart.routeName: (ctx) => Cart(),
+              Orders.routeName: (ctx) => Orders(),
+              UserProducts.routeName: (ctx) => UserProducts(),
+              EditProduct.routeName: (ctx) => EditProduct(),
+            },
+          ),
+        ));
   }
 }
