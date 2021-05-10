@@ -39,6 +39,10 @@ class Products with ChangeNotifier {
     // ),
   ];
 
+  final String authToken;
+
+  Products(this.authToken, this._items);
+
   List<Product> get getItems {
     return [..._items];
   }
@@ -53,7 +57,7 @@ class Products with ChangeNotifier {
 
   Future<void> getProducts() async {
     final url = Uri.parse(
-        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/products.json');
+        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/products.json?auth=$authToken');
     try {
       final res = await http.get(url);
       final extractedProducts = json.decode(res.body) as Map<String, dynamic>;

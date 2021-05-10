@@ -73,6 +73,14 @@ class AuthProvider with ChangeNotifier {
       if (resData['error'] != null) {
         throw HttpException(resData['error']['message']);
       }
+      _token = resData['idToken'];
+      _userId = resData['localId'];
+      _expiryDate = DateTime.now().add(
+        Duration(
+          seconds: int.parse(resData['expiresIn']),
+        ),
+      );
+      notifyListeners();
     } catch (error) {
       throw error;
     }
