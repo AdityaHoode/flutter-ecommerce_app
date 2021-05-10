@@ -22,6 +22,10 @@ class AuthProvider with ChangeNotifier {
     return null;
   }
 
+  String get getUserId {
+    return _userId;
+  }
+
   Future<void> signUp(String email, String password) async {
     final url = Uri.parse(
         "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${env['WEB_API_KEY']}");

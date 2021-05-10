@@ -1,3 +1,4 @@
+
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -40,8 +41,9 @@ class Products with ChangeNotifier {
   ];
 
   final String authToken;
+  final String userId;
 
-  Products(this.authToken, this._items);
+  Products(this.authToken, this.userId, this._items);
 
   List<Product> get getItems {
     return [..._items];
@@ -61,10 +63,16 @@ class Products with ChangeNotifier {
     try {
       final res = await http.get(url);
       final extractedProducts = json.decode(res.body) as Map<String, dynamic>;
-      final List<Product> loadedProducts = [];
       if (extractedProducts == null) {
         return;
       }
+
+      final favUrl = Uri.parse(
+          'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/userFavorites/$userId?auth=$authToken');
+      final favRes = await http.get(favUrl);
+      final favData = json.decode(favRes.body);
+
+      final List<Product> loadedProducts = [];
       extractedProducts.forEach((pId, pData) {
         loadedProducts.add(
           Product(
@@ -73,7 +81,7 @@ class Products with ChangeNotifier {
             price: pData['price'],
             description: pData['description'],
             imageUrl: pData['imageUrl'],
-            isFavorite: pData['isFavorite'],
+            isFavorite: false,
           ),
         );
       });
@@ -96,7 +104,6 @@ class Products with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
-          'isFavorite': product.isFavorite,
         },
       ),
     )
