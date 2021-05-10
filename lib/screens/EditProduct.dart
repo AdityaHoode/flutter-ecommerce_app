@@ -1,4 +1,3 @@
-
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/providers/productsProvider.dart';
 import 'package:flutter/material.dart';

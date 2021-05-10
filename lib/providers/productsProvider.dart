@@ -86,7 +86,7 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product product) {
     final url = Uri.parse(
-        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/products.json');
+        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/products.json?auth=$authToken');
     return http
         .post(
       url,
@@ -120,7 +120,7 @@ class Products with ChangeNotifier {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       final url = Uri.parse(
-          'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/products/$id.json');
+          'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken');
       await http.patch(
         url,
         body: json.encode(
@@ -133,13 +133,15 @@ class Products with ChangeNotifier {
         ),
       );
       _items[prodIndex] = newProduct;
+      notifyListeners();
     }
   }
 
   Future<void> deleteProduct(String id) {
     final url = Uri.parse(
-        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/products/$id.json');
+        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken');
     return http.delete(url).then((res) {
+      print(json.decode(res.body));
       if (res.statusCode >= 400) {
         throw Exception();
       }

@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
+import 'package:ecommerce_app/screens/Orders.dart';
 import 'package:ecommerce_app/widgets/CartItem.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
@@ -16,13 +17,17 @@ class OrderItemProvider {
 class OrdersProvider with ChangeNotifier {
   List<OrderItemProvider> _orders = [];
 
+  final String authToken;
+
+  OrdersProvider(this.authToken, this._orders);
+
   List<OrderItemProvider> get getOrders {
     return [..._orders];
   }
 
   Future<void> fetchOrders() async {
     final url = Uri.parse(
-        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/orders.json');
+        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/orders.json?auth=$authToken');
     final res = await http.get(url);
     final fetchedOrders = json.decode(res.body) as Map<String, dynamic>;
     final List<OrderItemProvider> loadedOrders = [];
@@ -55,7 +60,7 @@ class OrdersProvider with ChangeNotifier {
   Future<void> addOrder(
       List<CartItemProvider> cartProducts, double total) async {
     final url = Uri.parse(
-        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/orders.json');
+        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/orders.json?auth=$authToken');
     var timeStamp = DateTime.now();
     final res = await http.post(url,
         body: json.encode({
