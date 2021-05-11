@@ -56,9 +56,11 @@ class Products with ChangeNotifier {
     return _items.firstWhere((product) => product.id == id);
   }
 
-  Future<void> getProducts() async {
+  Future<void> getProducts([bool filterByUser = false]) async {
+    final filterString =
+        filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     final url = Uri.parse(
-        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/products.json?auth=$authToken&orderBy="creatorId"&equalTo="$userId"');
+        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterString');
     try {
       final res = await http.get(url);
       final extractedProducts = json.decode(res.body) as Map<String, dynamic>;
