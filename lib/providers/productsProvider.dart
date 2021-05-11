@@ -58,7 +58,7 @@ class Products with ChangeNotifier {
 
   Future<void> getProducts() async {
     final url = Uri.parse(
-        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/products.json?auth=$authToken');
+        'https://flutter-ecommerce-app-42497-default-rtdb.firebaseio.com/products.json?auth=$authToken&orderBy="creatorId"&equalTo="$userId"');
     try {
       final res = await http.get(url);
       final extractedProducts = json.decode(res.body) as Map<String, dynamic>;
