@@ -5,6 +5,7 @@ import 'package:ecommerce_app/screens/AuthScreen.dart';
 import 'package:ecommerce_app/screens/EditProduct.dart';
 import 'package:ecommerce_app/screens/Orders.dart';
 import 'package:ecommerce_app/screens/ProductsOverview.dart';
+import 'package:ecommerce_app/screens/SplashScreen.dart';
 import 'package:ecommerce_app/screens/UserProducts.dart';
 import './screens/ProductDetail.dart';
 import 'providers/productsProvider.dart';
@@ -49,7 +50,15 @@ class MyApp extends StatelessWidget {
               accentColor: Colors.deepOrange,
               fontFamily: 'Lato',
             ),
-            home: authData.getIsAuth ? ProductsOverview() : AuthScreen(),
+            home: authData.getIsAuth
+                ? ProductsOverview()
+                : FutureBuilder(
+                    future: authData.tryAutoLogin(),
+                    builder: (ctx, snapshot) =>
+                        snapshot.connectionState == ConnectionState.waiting
+                            ? SplashScreen()
+                            : AuthScreen(),
+                  ),
             routes: {
               ProductDetail.routeName: (ctx) => ProductDetail(),
               Cart.routeName: (ctx) => Cart(),
